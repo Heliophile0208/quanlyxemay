@@ -13,7 +13,7 @@ mysqli_set_charset($conn, "utf8");
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    $sql = "SELECT xe.maxe, xe.tenxe, xe.namsx, xe.mota, xe.hinh, hangxe.tenhang FROM xe JOIN hangxe ON xe.mahang = hangxe.mahang WHERE xe.maxe = ?";
+    $sql = "SELECT xe.maxe, xe.tenxe, xe.namsx, xe.mota, xe.hinh, hangxe.tenhang, xe.dungtich FROM xe JOIN hangxe ON xe.mahang = hangxe.mahang WHERE xe.maxe = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tenxe = $_POST['tenxe'];
     $mahang = $_POST['mahang'];
     $namsx = $_POST['namsx'];
+$dungtich = $_POST['dungtich'];
     $mota = $_POST['mota'];
     
     $target_dir = "Images/";
@@ -44,9 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    $sql = "UPDATE xe SET tenxe = ?, mahang = ?, namsx = ?, mota = ?, hinh = ? WHERE maxe = ?";
+    $sql = "UPDATE xe SET tenxe = ?, mahang = ?, namsx = ?, dungtich= ?, mota = ?, hinh = ? WHERE maxe = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssissi", $tenxe, $mahang, $namsx, $mota, $hinh, $id);
+    $stmt->bind_param("ssiissi", $tenxe, $mahang, $namsx, $dungtich, $mota, $hinh, $id);
     
     if ($stmt->execute()) {
         echo "<script>alert('Cập nhật thành công!'); window.location.href='sua-xe.php';</script>";
@@ -156,6 +157,8 @@ button:active {
 
         <label for="namsx">Năm Sản Xuất:</label>
         <input type="number" id="namsx" name="namsx" value="<?php echo $row['namsx']; ?>" min="<?php echo date('Y') - 5; ?>" max="<?php echo date('Y'); ?>" required>
+  <label for="dungtich">Dung Tích:</label>
+        <textarea id="dungtich" name="dungtich" required><?php echo $row['dungtich']; ?></textarea>
 
         <label for="mota">Mô Tả:</label>
         <textarea id="mota" name="mota" required><?php echo $row['mota']; ?></textarea>
