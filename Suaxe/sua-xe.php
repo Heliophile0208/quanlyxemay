@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 mysqli_set_charset($conn, "utf8");
-$sql = "SELECT xe.maxe, xe.tenxe, xe.namsx, xe.mota, hangxe.tenhang FROM xe JOIN hangxe ON xe.mahang = hangxe.mahang";
+$sql = "SELECT xe.maxe, xe.tenxe, xe.namsx, xe.mota,xe.dungtich ,hangxe.tenhang FROM xe JOIN hangxe ON xe.mahang = hangxe.mahang";
 $result = $conn->query($sql);
 ?>
 
@@ -161,7 +161,9 @@ $result = $conn->query($sql);
                 <th>Tên Xe</th>
                 <th>Hãng Sản Xuất</th>
                 <th>Năm Sản Xuất</th>
+                <th>Dung Tích</th>
                 <th>Mô Tả</th>
+              
                 <th>Hành Động</th>
             </tr>
             <?php if ($result->num_rows > 0): ?>
@@ -170,6 +172,7 @@ $result = $conn->query($sql);
                         <td><?php echo $row['tenxe']; ?></td>
                         <td><?php echo $row['tenhang']; ?></td>
                         <td><?php echo $row['namsx']; ?></td>
+ <td><?php echo $row['dungtich']; ?></td>
                         <td><?php echo $row['mota']; ?></td>
                         <td><a href="sua-tt.php?id=<?php echo $row['maxe']; ?>">Chỉnh sửa</a></td>
                     </tr>
