@@ -16,28 +16,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tenxe = $_POST['tenxe'];
     $mahang = $_POST['mahang'];
     $namsx = $_POST['namsx'];
+    $dungtich =$_POST['dungtich'];
     $mota = $_POST['mota'];
 
     $target_dir = "Images/";
     $target_file = $target_dir . basename($_FILES["hinh"]["name"]);
 
     if (move_uploaded_file($_FILES["hinh"]["tmp_name"], $target_file)) {
-        $sql = "INSERT INTO xe (tenxe, mahang, namsx, mota, hinh) VALUES ('$tenxe', '$mahang', '$namsx', '$mota', '$target_file')";
+    $sql = "INSERT INTO xe (tenxe, mahang, namsx, dungtich, mota, hinh) VALUES ('$tenxe', '$mahang', '$namsx', '$dungtich', '$mota', '$target_file')";
 
-        if ($conn->query($sql) === TRUE) {
-            $new_vehicle = [
-                'tenxe' => $tenxe,
-                'mahang' => $mahang,
-                'namsx' => $namsx,
-                'mota' => $mota,
-                'hinh' => $target_file
-            ];
-        } else {
-            echo "<script>alert('Lỗi: " . $conn->error . "');</script>";
-        }
+    if ($conn->query($sql) === TRUE) {
+        $new_vehicle = [
+            'tenxe' => $tenxe,
+            'mahang' => $mahang,
+            'namsx' => $namsx,
+            'dungtich' => $dungtich,
+            'mota' => $mota,
+            'hinh' => $target_file
+        ];
     } else {
-        echo "<script>alert('Có lỗi khi tải lên hình ảnh.');</script>";
+        echo "<script>alert('Lỗi: " . $conn->error . "');</script>";
     }
+} else {
+    echo "<script>alert('Có lỗi khi tải lên hình ảnh.');</script>";
+}
+
 }
 
 $sql = "SELECT mahang, tenhang FROM hangxe";
@@ -271,10 +274,18 @@ $result = $conn->query($sql);
                     <label for="namsx">Năm Sản Xuất:</label>
                     <input type="number" id="namsx" name="namsx" value="<?php echo date('Y'); ?>" min="<?php echo date('Y') - 5; ?>" max="<?php echo date('Y'); ?>" required>
                 </div>
+
+  <div class="nhap">
+                     <label for="dungtich">Dung Tích:</label>
+
+                     <input id="dungtich" name="dungtich" required></input>
+                 </div>
+
                 <div class="nhap">
                     <label for="mota">Mô Tả:</label>
                     <textarea id="mota" name="mota" required></textarea>
                 </div>
+               
                 <div class="nhap anh">
                     <label for="hinh">Hình Ảnh:</label>
                     <input type="file" id="hinh" name="hinh" accept="image/*" required>
@@ -302,6 +313,10 @@ $result = $conn->query($sql);
                         <th>Năm Sản Xuất</th>
                         <td><?php echo $new_vehicle['namsx']; ?></td>
                     </tr>
+                     <tr>
+                         <th>Dung Tích</th>
+                         <td><?php echo $new_vehicle['dungtich']; ?></td>
+                     </tr>
                     <tr>
                         <th>Mô Tả</th>
                         <td><?php echo $new_vehicle['mota']; ?></td>
